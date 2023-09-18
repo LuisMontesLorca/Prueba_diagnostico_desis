@@ -5,7 +5,7 @@ Para poder ejecutar el proyecto, es necesario tener instalado PHP y todas las he
 
 Se debe ejecutar el script que se encuentra en la carpeta SQL_script en MySQL.
 
-Para ejecutar el proyecto, utiliza `php serve: serve project` en el archivo `index.html`.
+Para ejecutar el proyecto, utiliza `php serve: serve project` dando click derecho en el archivo `index.html`.
 
 Utilicé PHP 8.2.4.
 
