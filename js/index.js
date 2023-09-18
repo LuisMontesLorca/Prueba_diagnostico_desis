@@ -46,72 +46,71 @@ function sendFormulario() {
     var nombre = document.getElementById("nombre").value;
     var alias = document.getElementById("alias").value;
     var rut = document.getElementById("rut").value;
+    var email = document.getElementById("email").value;
+    var region = document.getElementById("select_region").value; 
+    var comuna = document.getElementById("select_comuna").value;
+    var candidato = document.getElementById("select_candidato").value;
     // Se valida que el rut sea chileno
     var rut_validado = validarRut(rut);
     if (rut_validado)
     {
-        rut_validado =rut
+        rut_validado = rut; 
+        // Se valida que hayan 2 checkbox clickeados
+        if (!alMenosDosCheckboxMarcados()) // Si alMenosDosCheckboxMarcados() es falso devuele un alert
+        {
+            alert("Cómo se enteró de nosotros: Debe seleccionar al menos dos opciones.");
+            return; 
+        }
+        // Uso de ajax para el envío de datos
+        $.post("php/index.php", {        
+            nombre: nombre,
+            alias: alias,
+            rut: rut_validado,
+            email: email,
+            region: region,
+            comuna: comuna,
+            candidato: candidato,
+            // Si el checkbox esta clickeado devuelve 1, en caso contrario devuelve 0 
+            web: document.getElementById("web").checked ? 1 : 0,
+            tv: document.getElementById("tv").checked ? 1 : 0,
+            rrss: document.getElementById("rrss").checked ? 1 : 0,
+            amigo: document.getElementById("amigo").checked ? 1 : 0,
+            proceso: 'ENVIAR_FORMULARIO' // Se envia el proceso para identificar que hacer
+        }, function(result) {
+            console.log(result);
+            var obj = JSON.parse(result);
+            try {
+                if (obj.respuesta === 'OK') // Si la respuesta fue exitosa se pasan a vacio los datos y se despliega alert de registro exitoso
+                {
+                    alert("Registro con éxito");
+                    // Deja en vacio los input
+                    document.getElementById("nombre").value = "";
+                    document.getElementById("alias").value = "";
+                    document.getElementById("rut").value = "";
+                    document.getElementById("email").value = "";
+
+                    // Deja en vacio los select
+                    document.getElementById('select_region').value= '';
+                    document.getElementById('select_comuna').value = '';
+                    document.getElementById('select_candidato').value = '';
+
+                    // Desmarca todos los checkboxes
+                    document.getElementById("web").checked = false;
+                    document.getElementById("tv").checked = false;
+                    document.getElementById("rrss").checked = false;
+                    document.getElementById("amigo").checked = false;
+                } 
+                else 
+                {
+                    alert("Error al registrar: " + obj.respuesta);
+                }
+            } catch (error) {
+                console.error("Error al analizar la respuesta JSON: " + error);
+            }
+        }); 
     }
     else
     {
         alert("El rut ingresado no es válido, intente nuevamente")
     }
-    var email = document.getElementById("email").value;
-    var region = document.getElementById("select_region").value; 
-    var comuna = document.getElementById("select_comuna").value;
-    var candidato = document.getElementById("select_candidato").value;
-
-    // Se valida que hayan 2 checkbox clickeados
-    if (!alMenosDosCheckboxMarcados()) // Si alMenosDosCheckboxMarcados() es falso devuele un alert
-    {
-        alert("Cómo se enteró de nosotros: Debe seleccionar al menos dos opciones.");
-        return; 
-    }
-    // Uso de ajax para el envío de datos
-    $.post("php/index.php", {        
-        nombre: nombre,
-        alias: alias,
-        rut: rut,
-        email: email,
-        region: region,
-        comuna: comuna,
-        candidato: candidato,
-        // Si el checkbox esta clickeado devuelve 1, en caso contrario devuelve 0 
-        web: document.getElementById("web").checked ? 1 : 0,
-        tv: document.getElementById("tv").checked ? 1 : 0,
-        rrss: document.getElementById("rrss").checked ? 1 : 0,
-        amigo: document.getElementById("amigo").checked ? 1 : 0,
-        proceso: 'ENVIAR_FORMULARIO' // Se envia el proceso para identificar que hacer
-    }, function(result) {
-        console.log(result);
-        var obj = JSON.parse(result);
-        try {
-            if (obj.respuesta === 'OK') // Si la respuesta fue exitosa se pasan a vacio los datos y se despliega alert de registro exitoso
-            {
-                alert("Registro con éxito");
-                // Deja en vacio los input
-                document.getElementById("nombre").value = "";
-                document.getElementById("alias").value = "";
-                document.getElementById("rut").value = "";
-                document.getElementById("email").value = "";
-
-                // Deja en vacio los select
-                document.getElementById('select_region').value= '';
-                document.getElementById('select_comuna').value = '';
-                document.getElementById('select_candidato').value = '';
-
-                // Desmarca todos los checkboxes
-                document.getElementById("web").checked = false;
-                document.getElementById("tv").checked = false;
-                document.getElementById("rrss").checked = false;
-                document.getElementById("amigo").checked = false;
-            } 
-            else 
-            {
-                alert("Error al registrar: " + obj.respuesta);
-            }
-        } catch (error) {
-            console.error("Error al analizar la respuesta JSON: " + error);
-        }
-    }); 
 }
