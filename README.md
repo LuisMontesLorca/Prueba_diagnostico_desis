@@ -6,6 +6,7 @@ Para poder ejecutar el proyecto, es necesario tener instalado PHP y todas las he
 Se debe ejecutar el script que se encuentra en la carpeta SQL_script en MySQL para poder cargar la base de datos.
 
 Para ejecutar el proyecto, utiliza `php serve: serve project` dando click derecho en el archivo `index.html`.
+![image](https://github.com/LuisMontesLorca/Prueba_diagnostico_desis/assets/101368246/a3d3f762-c883-4ddf-8d4b-aa9ac4abb210)
 
 Utilicé PHP 8.2.4.
 
